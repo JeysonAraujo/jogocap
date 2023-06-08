@@ -90,21 +90,73 @@ const flappyBird = {
     }
 }
 
+const getRead = {
+    spriteX: 134,
+    spriteY: 0,
+    largura: 174,
+    altura: 152,
+    x: (canvas.width / 2) - 174 / 2,
+    y: 50,
+    desenha(){
+        ctx.drawImage(
+            sprites, 
+            getRead.spriteX, getRead.spriteY, 
+            getRead.largura, getRead.altura, 
+            getRead.x, getRead.y, 
+            getRead.largura, getRead.altura,
+        );
+    }
+}
+
+//
+// [Telas]
+//
+let activiTela = {};
+function mudaTela(newTela){
+    activiTela = newTela;
+}
+
+const Telas = {
+    inicio:{
+       desenha(){
+        fundo.desenha();
+        chao.desenha();
+        flappyBird.desenha();
+        getRead.desenha();
+       },
+       click(){
+            mudaTela(Telas.game);
+       },
+       atualiza(){
+
+       }
+    }
+};
+
+Telas.game = {
+    desenha(){   
+        fundo.desenha();
+        chao.desenha();
+        flappyBird.desenha();
+    },
+    atualiza(){
+        flappyBird.atualiza();
+    }
+};
 
 function loop(){ 
-    flappyBird.atualiza();
-    fundo.desenha();
-    chao.desenha();
-    flappyBird.desenha();
-
-
-
-
+   activiTela.desenha();
+   activiTela.atualiza();
 
     requestAnimationFrame(loop);
 }
 
 
+window.addEventListener('click', function(){
+    if(activiTela.click){
+        activiTela.click(); 
+    }
+});
 
-
+mudaTela(Telas.inicio);
 loop();
